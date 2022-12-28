@@ -1,0 +1,175 @@
+﻿
+@{
+    ViewBag.Title = "TypeList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*ADD BUTTON OF TYPE*@
+<button type="submit" style="margin: 5px; background-color: #5233b7; color: white;" id="InsertTypebtn"> ADD </button>
+
+@*INSERT/UPDATE MODAL ALERT WINDOW OF TYPE*@
+<div class="modal" tabindex="-1" role="dialog" id="EditandInsertTypemodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">CUSTOMIZE TYPE</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="margin-left: 165px;">
+                <form>
+                    <label>NAME</label>
+                    <input class="form-control" id="productType" placeholder="Shirt, Jeans, Kaki, Cotton, ..." value="">
+
+                    <input class="form-control" id="productidType" type="hidden" />
+
+                </form>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="InsertandEditTypebtn">SAVE</button>
+            <button type="button" class="btn btn-info" data-dismiss="modal">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+@*DELETE MODAL ALERT WINDOWS OF SIZE*@
+<div class="modal" tabindex="-1" role="dialog" id="DeleteTypemodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">DISPOSING PRODUCT</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>ARE YOU SURE WANT TO DELETE THIS PRODUCT?</p>
+                <input class="form-control" id="DeleteidType" type="hidden" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="ConfirmType">YES</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*DISPLAY LIST OF SIZE*@
+<div id="TypeList" class="text-center" style="display:flex; flex-wrap: wrap;"></div>
+
+
+
+
+
+<script>
+    $(document).ready(
+        function () {
+
+            @*Modifying id of ADD button of type.*@
+            $("#InsertTypebtn").click(
+                function () {
+                    $("#EditandInsertTypemodal").modal("show");
+                    $("#productType").val("");
+                    $("#productidType").val("");
+                }
+            );
+
+            @*Show list of product via $.ajax({ }); of type*@
+            $.ajax({
+                url: "/Home/DisplayTypeList/",
+                type: "GET",
+                data: {},
+                success: function (DataList) {
+                    $(DataList).each(function () {
+                        var htmlcsslist = '<div class="col-lg-4" style ="background-color:rgb(255, 15, 80); margin: 15px; color: white; width: 300px; display:inline-block;">';
+                        htmlcsslist += "<div class='nameType'> Type: " + this.NameofType + "</div>";
+
+
+                        @* Assign id of Update button to id of Datalist of type.*@
+                        htmlcsslist += "<button type='submit' class='Updatebtn' id='" + this.IdTypeCloth + "' style='margin: 5px; background-color: #5233b7; color: white; '> Edit </button>";
+                        @* Assign id of Delete button to id of Datalist. *@
+                        htmlcsslist += "<button type='submit' class='Deletebtn' id='" + this.IdTypeCloth + "' style='margin: 5px; background-color: #5233b7; color: white; '> Delete </button>";
+                        htmlcsslist += "</div>";
+                        $('#TypeList').append(htmlcsslist);
+                    });
+                    @* Modifying class of Update button of type.*@
+                    $(".Updatebtn").click(function (thisbtn) {
+                        $("#EditandInsertTypemodal").modal("show");
+                        $.ajax({
+                            url: "GetTypeId/",
+                            type: "POST",
+                            data:  { id: thisbtn.target.id },
+                            success: function (tableType) {
+
+                                $("#productType").val(tableType.NameofType);
+                                $("#productidType").val(tableType.IdTypeCloth);
+                            },
+
+                        });
+                    });
+                    @* Modifying class of Delete button of type.*@
+                    $(".Deletebtn").click(function (thisclassDeletebtn) {
+                        $("#DeleteTypemodal").modal("show");
+                        $("#DeleteidType").val(thisclassDeletebtn.target.id);
+                    });
+                }
+
+            });
+
+            @*Modifying id of SAVE button of type.*@
+            $("#InsertandEditTypebtn").click(function () {
+                $.ajax({
+                    url: "AddandEditTypeName/",
+                    type: "POST",
+                    data: { id: $("#productidType").val(), typename: $("#productType").val() },
+                    success: function (announcement) {
+
+                        console.log(announcement);
+                        window.alert(announcement);
+                        @* This event method locaiton.reload() will reload the web page of type.*@
+                        location.reload();
+
+
+                    }
+
+                });
+            });
+
+            @*Modifying id of YES button in Delete modal of type.*@
+            $("#ConfirmType").click(
+                function () {
+                    $.ajax({
+                        url: "DeleteTypeName/",
+                        type: "POST",
+                        data: { id: $("#DeleteidType").val() },
+                        success: function (announcement) {
+
+                            window.alert(announcement);
+                            @*This event method locaiton.reload() will reload the web page of type.*@
+                            location.reload();
+                        }
+                    });
+                }
+            );
+
+
+
+
+
+
+
+
+
+
+
+        });
+
+
+
+</script>
+
+

@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ClothesDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Brands">
+          <Key>
+            <PropertyRef Name="Idbrand" />
+          </Key>
+          <Property Name="Idbrand" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Createdby" Type="uniqueidentifier" />
+          <Property Name="Updatedby" Type="uniqueidentifier" />
+          <Property Name="Updateddate" Type="datetime" />
+          <Property Name="Createddate" Type="datetime" />
+          <Property Name="Namebrand" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Sizes">
+          <Key>
+            <PropertyRef Name="IdSize" />
+          </Key>
+          <Property Name="IdSize" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Createdby" Type="uniqueidentifier" />
+          <Property Name="Updatedby" Type="uniqueidentifier" />
+          <Property Name="Updateddate" Type="datetime" />
+          <Property Name="Createddate" Type="datetime" />
+          <Property Name="NameofSize" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="TypeClothes">
+          <Key>
+            <PropertyRef Name="IdTypeCloth" />
+          </Key>
+          <Property Name="IdTypeCloth" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Createdby" Type="uniqueidentifier" />
+          <Property Name="Updatedby" Type="uniqueidentifier" />
+          <Property Name="Updateddate" Type="datetime" />
+          <Property Name="Createddate" Type="datetime" />
+          <Property Name="NameofType" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityContainer Name="ClothesDBModelStoreContainer">
+          <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sizes" EntityType="Self.Sizes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypeClothes" EntityType="Self.TypeClothes" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ClothesDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="Idbrand" />
+          </Key>
+          <Property Name="Idbrand" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Createdby" Type="Guid" />
+          <Property Name="Updatedby" Type="Guid" />
+          <Property Name="Updateddate" Type="DateTime" Precision="3" />
+          <Property Name="Createddate" Type="DateTime" Precision="3" />
+          <Property Name="Namebrand" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Size">
+          <Key>
+            <PropertyRef Name="IdSize" />
+          </Key>
+          <Property Name="IdSize" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Createdby" Type="Guid" />
+          <Property Name="Updatedby" Type="Guid" />
+          <Property Name="Updateddate" Type="DateTime" Precision="3" />
+          <Property Name="Createddate" Type="DateTime" Precision="3" />
+          <Property Name="NameofSize" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TypeClothe">
+          <Key>
+            <PropertyRef Name="IdTypeCloth" />
+          </Key>
+          <Property Name="IdTypeCloth" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Createdby" Type="Guid" />
+          <Property Name="Updatedby" Type="Guid" />
+          <Property Name="Updateddate" Type="DateTime" Precision="3" />
+          <Property Name="Createddate" Type="DateTime" Precision="3" />
+          <Property Name="NameofType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="ClothesDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Brands" EntityType="Self.Brand" />
+          <EntitySet Name="Sizes" EntityType="Self.Size" />
+          <EntitySet Name="TypeClothes" EntityType="Self.TypeClothe" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ClothesDBModelStoreContainer" CdmEntityContainer="ClothesDBEntities">
+          <EntitySetMapping Name="Brands">
+            <EntityTypeMapping TypeName="ClothesDBModel.Brand">
+              <MappingFragment StoreEntitySet="Brands">
+                <ScalarProperty Name="Idbrand" ColumnName="Idbrand" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Createdby" ColumnName="Createdby" />
+                <ScalarProperty Name="Updatedby" ColumnName="Updatedby" />
+                <ScalarProperty Name="Updateddate" ColumnName="Updateddate" />
+                <ScalarProperty Name="Createddate" ColumnName="Createddate" />
+                <ScalarProperty Name="Namebrand" ColumnName="Namebrand" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sizes">
+            <EntityTypeMapping TypeName="ClothesDBModel.Size">
+              <MappingFragment StoreEntitySet="Sizes">
+                <ScalarProperty Name="IdSize" ColumnName="IdSize" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Createdby" ColumnName="Createdby" />
+                <ScalarProperty Name="Updatedby" ColumnName="Updatedby" />
+                <ScalarProperty Name="Updateddate" ColumnName="Updateddate" />
+                <ScalarProperty Name="Createddate" ColumnName="Createddate" />
+                <ScalarProperty Name="NameofSize" ColumnName="NameofSize" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypeClothes">
+            <EntityTypeMapping TypeName="ClothesDBModel.TypeClothe">
+              <MappingFragment StoreEntitySet="TypeClothes">
+                <ScalarProperty Name="IdTypeCloth" ColumnName="IdTypeCloth" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Createdby" ColumnName="Createdby" />
+                <ScalarProperty Name="Updatedby" ColumnName="Updatedby" />
+                <ScalarProperty Name="Updateddate" ColumnName="Updateddate" />
+                <ScalarProperty Name="Createddate" ColumnName="Createddate" />
+                <ScalarProperty Name="NameofType" ColumnName="NameofType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

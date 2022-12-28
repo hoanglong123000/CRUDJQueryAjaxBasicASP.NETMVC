@@ -1,0 +1,176 @@
+﻿@{
+    ViewBag.Title = "BrandList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*ADD BUTTON OF BRAND*@
+<button type="submit" style="margin: 5px; background-color: #5233b7; color: white;" id="Insertbtn"> ADD </button>
+
+@*INSERT/UPDATE MODAL ALERT WINDOW OF BRAND*@
+<div class="modal" tabindex="-1" role="dialog" id="EditandInsertmodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">CUSTOMIZE BRAND</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="margin-left: 165px;">
+                <form>
+                    <label>NAME</label>
+                    <input class="form-control" id="productbrand" placeholder="Nike, Louis Vuiton, ..." value="">
+
+                    <input class="form-control" id="productid" type="hidden" />
+
+                </form>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="InsertandEditbtn">SAVE</button>
+            <button type="button" class="btn btn-info" data-dismiss="modal">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+@*DELETE MODAL ALERT WINDOWS OF BRAND*@
+<div class="modal" tabindex="-1" role="dialog" id="Deletemodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">DISPOSING PRODUCT</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>ARE YOU SURE WANT TO DELETE THIS PRODUCT?</p>
+                <input class="form-control" id="Deleteid" type="hidden" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="Confirm">YES</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*DISPLAY LIST OF BRAND*@
+<div id="ClothList" class="text-center" style="display:flex; flex-wrap: wrap;"></div>
+
+
+
+
+
+<script>
+    $(document).ready(
+        function () {
+
+            @*Modifying id of ADD button of brand.*@
+            $("#Insertbtn").click(
+                function () {
+                    $("#EditandInsertmodal").modal("show");
+                    $("#productbrand").val("");
+                }
+            );
+
+            @*Show list of product via $.ajax({ }); of brand*@
+            $.ajax({
+                url: "/Home/DisplayBrandList/",
+                type: "GET",
+                data: {},
+                success: function (DataList) {
+                    $(DataList).each(function () {
+                        var htmlcsslist = '<div class="col-lg-4" style ="background-color:rgb(255, 15, 80); margin: 15px; color: white; width: 300px; display:inline-block;">';
+                        htmlcsslist += "<div class='namebrand'> Name: " + this.Namebrand + "</div>";
+
+
+                        @* Assign id of Update button to id of Datalist of brand.*@
+                        htmlcsslist += "<button type='submit' class='Updatebtn' id='" + this.Idbrand + "' style='margin: 5px; background-color: #5233b7; color: white; '> Edit </button>";
+                        @* Assign id of Delete button to id of Datalist. *@
+                        htmlcsslist += "<button type='submit' class='Deletebtn' id='" + this.Idbrand + "' style='margin: 5px; background-color: #5233b7; color: white; '> Delete </button>";
+                        htmlcsslist += "</div>";
+                        $('#ClothList').append(htmlcsslist);
+                    });
+                    @* Modifying class of Update button of brand.*@
+                    $(".Updatebtn").click(function (thisbtn) {
+                        $("#EditandInsertmodal").modal("show");
+                        $.ajax({
+                            url: "GetBrandId",
+                            type: "POST",
+                            data:  { id: thisbtn.target.id },
+                            success: function (tableBrand) {
+
+                                $("#productbrand").val(tableBrand.Namebrand);
+                                $("#productid").val(tableBrand.Idbrand);
+                            },
+
+                        });
+                    });
+                    @* Modifying class of Delete button of brand.*@
+                    $(".Deletebtn").click(function (thisclassDeletebtn) {
+                        $("#Deletemodal").modal("show");
+                        $("#Deleteid").val(thisclassDeletebtn.target.id);
+                    });
+                }
+
+            });
+
+            @*Modifying id of SAVE button of brand.*@
+            $("#InsertandEditbtn").click(function () {
+                $.ajax({
+                    url: "AddandEditBrandName/",
+                    type: "POST",
+                    data: { id: $("#productid").val(), brandname: $("#productbrand").val() },
+                    success: function (announcement) {
+
+                        console.log(announcement);
+                        window.alert(announcement);
+                        @* This event method locaiton.reload() will reload the web page of brand.*@
+                        location.reload();
+
+
+                    }
+
+                });
+            });
+
+            @*Modifying id of YES button in Delete modal of brand.*@
+            $("#Confirm").click(
+                function () {
+                    $.ajax({
+                        url: "DeleteBrandName/",
+                        type: "POST",
+                        data: { id: $("#Deleteid").val() },
+                        success: function (announcement) {
+
+                            window.alert(announcement);
+                            @*This event method locaiton.reload() will reload the web page of brand.*@
+                            location.reload();
+                        }
+                    });
+                }
+            );
+
+            
+
+
+
+
+
+
+
+
+
+        });
+
+
+
+</script>
+
+
+
+
+
